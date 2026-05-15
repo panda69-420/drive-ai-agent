@@ -1,12 +1,17 @@
+import os
+import json
+
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
-SERVICE_ACCOUNT_FILE = 'credentials.json'
 
+google_credentials = os.getenv("GOOGLE_CREDENTIALS")
 
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE,
+credentials_info = json.loads(google_credentials)
+
+credentials = service_account.Credentials.from_service_account_info(
+    credentials_info,
     scopes=SCOPES
 )
 
