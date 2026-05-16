@@ -1,24 +1,28 @@
 from fastapi import FastAPI
-from agent import generate_drive_query
 from drive_search import search_drive
+from agent import generate_drive_query
 
 app = FastAPI()
-
-
-@app.get("/")
-def home():
-    return {"message": "Drive AI Agent Backend Running"}
-
 
 @app.get("/chat")
 def chat(user_input: str):
 
-    drive_query = generate_drive_query(user_input)
+    try:
 
-    results = search_drive(drive_query)
+        drive_query = generate_drive_query(user_input)
 
-    return {
-        "user_input": user_input,
-        "generated_query": drive_query,
-        "results": results
-    }
+        results = search_drive(drive_query)
+
+        return {
+            "success": True,
+            "user_input": user_input,
+            "generated_query": drive_query,
+            "results": results
+        }
+
+    except Exception as e:
+
+        return {
+            "success": False,
+            "error": str(e)
+        }
